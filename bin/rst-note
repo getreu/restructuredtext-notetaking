@@ -1,0 +1,289 @@
+#!/bin/sh
+# Author: Jens Getreu
+# 16.2.2016
+# license: MIT
+
+### CONFIGURATION SECTION START
+
+LaunchViewer () {
+    # WARNING: if the environment variable RST_VIEWER is defined
+    # the following code is never executed!
+
+    # Note: we need & at the end of the line!
+    # Uncomment one line only!
+    restview "$1" &
+    return 0
+}
+
+LaunchEditor () {
+    # WARNING: if the environment variable RST_EDITOR is defined
+    # the following code is never executed!
+
+    # Note there is no & in this function. The editor should not fork!
+    # Uncomment one line only!
+
+    # Very simple Linux editor.
+    #leafpad "$1"
+    # Linux geany. Optional: enable autosave in geany's save plugin.
+    #geany "$1"
+    # Alternatively run gvim.
+    gvim --nofork "$1"
+    return 0
+}
+
+### CONFIGURATION SECTION END
+
+
+
+Readlink () {
+    # Path=$(readlink -f "$1") # not available in busybox
+    # We actually only need absolute paths so the following will do.
+    local Path
+    Path="$(echo "$(cd "$(dirname "$1")" && pwd -P)"/"$(basename "$1")")"
+    # return global variable
+    Readlink="$Path"
+}
+
+
+
+
+Main () {
+    if  [ "-h" = "$1" ]; then
+        echo "\n${0} creates, edits or views an reStructuredText note."
+        echo "\nusage:"
+        echo "\n   $_ [-h][-ro|-so|-eo] | [<File.rst>|<Dir>|<File>]"
+        echo "\n<Dir>|<File>: directory where the new note file will be created"
+        echo "(current directory if none)."
+        echo "If <File> is given a new rst note will be created next to that file."
+        echo "If <File.rst> is given the file is edited."
+        echo "Filename of <File> is changed when not in sync with title."
+        echo "\nOptions:"
+        echo "-ro\tDo not open editor, open viewer only."
+        echo "-eo\tDo not open viewer, only new note or, sync filename and edit."
+        echo "-so\tDo not open editor or viewer, only new note or sync filename."
+        exit 0
+    fi
+
+    local Path
+    local Option
+    if  [ "-ro" = "$1" ] || [ "-so" = "$1" ] || [ "-eo" = "$1" ] ; then
+        Option="$1"
+        Readlink "$2"
+    else
+        Option=""
+        Readlink "$1"
+    fi
+    Path="$Readlink"
+
+
+    # If file extension is not .rst then create a new note.
+    if [ ! -n "$Path" ] || \
+     [ !  "$(echo "$Path"|awk -F . '{print $NF}')" = "rst" ]  ; then
+        RstNewNote "$Path"  || exit 1
+        Path="$RstNewNote"
+    fi
+
+    if [ -f "$Path" ] ; then
+        if  [ ! "-ro" = "$Option" ] ; then
+            SyncFilename "$Path"
+            Path="$SyncFilename"
+        fi
+        if  [ ! "-eo" = "$Option" ] && \
+            [ ! "-so" = "$Option" ] ; then
+            RstView "$Path"
+        fi
+        if  [ ! "-ro" = "$Option" ] && \
+            [ ! "-so" = "$Option" ] ; then
+            RstEdit "$Path"
+            SyncFilename "$RstEdit"
+            Path="$SyncFilename"
+        fi
+        echo "$Path"
+        exit 0
+    else
+        echo "Error: Can not open '$Path'." >&2
+        exit 1
+    fi
+}
+
+SanitizeFilename () {
+    # line 1:   tab -> space
+    # line 2:   Delete control characters.
+    # line 3:   :\\/|?~,;=   ->  _
+    # line 4:
+    #   Exclude NTFS critical characters:       <>:"\\/|?*
+    #   https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247%28v=vs.85%29.aspx
+    #   Exclude restricted in fat32:        +,;=[]
+    #   https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
+    #   These are considered unsafe in URLs:    <>#%{}|\^~[]`
+    #   https://perishablepress.com/stop-using-unsafe-characters-in-urls/
+    # line 5:   Strip all until the first alpha char at the beginning
+    #       and all spaces and _ at the end of the line.
+    # line 6:   Remove spaces and _ before and after --.
+    # Return global variable
+    SanitizeFilename="$(echo "$1"| \
+        tr -s '[:blank:]'   ' '| \
+        tr -d '[:cntrl:]' | \
+        tr -s ':\\/|?~,;='   '_'| \
+        tr -s '<>:"\\/|?*<>#%{}|\^~[]+,;=[]`[:blank:]'    ' '| \
+        sed -e 's/[[:blank:]_]*\(.*\)/\1/g; s/[[:blank:]_]*$//g' \
+            -e 's/[[:blank:]_]*--[[:blank:]_]*/--/g'
+        )"
+}
+
+
+SyncFilename () {
+    # Pathname of the restructuredtext-file
+    local Path
+    Path="$1"
+
+    # Change filename according to the title in the
+    # first line of the .rst file.
+
+    # Extract title from the first line of the .rst file
+    local FirstLine
+    FirstLine="$(head -n 5 "$Path")" || exit 1
+    local Title
+    # line 1: stream the string
+    # line 2: delete all rst-section marker lines
+    # line 3: delete all rst directives and link lines
+    #         (lines starting with '..' or ':' )
+    # line 4: concat the title strings, '--' and the subtitle sting (if any)
+    Title="$(echo "$FirstLine" | \
+    sed -e '/###\+$/d' -e '/\*\*\*\+$/d' -e '/===\+$/d' -e '/---\+$/d' \
+                       -e '/^:/d' -e '/^\.\./d' | \
+    sed  -z -e 's/\n*$//'  -e 's/\n\+/--/'g
+            )"
+    # A title was found when Title <> FirstLine
+    if [ ! "$FirstLine" = "$Title" ] ; then
+        # extract leading numbers including "-" and "_"
+        # example  "20150912-hallo.rst" -> "20150912-"
+        # example  "01-abstract.rst" -> "01-"
+        # example  "04-01_03-abstract.rst" -> "04-01_03-"
+        # example  "hallo02-abstract.rst" -> ""
+        local BaseName
+        BaseName="$(basename "$Path")"
+        local LeadingNumbers
+        LeadingNumbers="$(echo "$BaseName" | \
+            sed -e 's/\([[:digit:]_-]*\)\(.*\)/\1/')"
+        # if no leading numbers found the following equals
+        if [ "$BaseName" = "$LeadingNumbers" ] ; then
+            LeadingNumbers="" #no leading no. found
+        fi
+
+        # Substitute special chars with _
+        SanitizeFilename "$Title"
+        local FileTitle
+        FileTitle="$(echo "$SanitizeFilename"|
+                sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')"
+        # Construct new name
+        local DirName
+        DirName="$(dirname "$Path")"
+        local NewPath="${DirName}/${LeadingNumbers}${FileTitle}.rst"
+        mv -n "$Path" "$NewPath" >/dev/null 2>&1
+        Path="$NewPath"
+    fi
+
+    # Return global variable
+    SyncFilename="$Path"
+}
+
+#http://stackoverflow.com/questions/38015239/url-encoding-a-string-in-shell-script-in-a-portable-way/38021063
+urlencodepipe() {
+  local LANG=C; local c; while IFS= read -r c; do
+    case $c in [a-zA-Z0-9.~_-]) printf "$c"; continue ;; esac
+    printf "$c" | od -An -tx1 | tr ' ' % | tr -d '\n'
+  done <<EOF
+$(fold -w1)
+EOF
+  echo
+}
+
+urlencode() { printf "$*" | urlencodepipe ;}
+
+RstNewNote () {
+    local Dir
+    local Basename
+    local DocRef
+    local NewFileName
+    if [ -n "$1" ] && [ -f "$1" ] ; then
+        Dir="$(dirname "$1")"
+        Basename="$(basename "$1")"
+        DocRef="\`${Basename}\`__"
+        DocRef="${DocRef}\n\n.. __: $(urlencode ${Basename})"
+        SanitizeFilename "$Basename"
+        NewFileName="$Dir/${SanitizeFilename}.rst"
+    elif [ -n "$1" ] && [ -d "$1" ] ; then
+        Dir="$1"
+        Basename="$(basename "$1")"
+        DocRef=""
+        # omit leading numbers, "-" and "_"
+        Basename="$(echo "$Basename"| \
+            sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')"
+        SanitizeFilename "$Basename"
+        NewFileName="$Dir/$(date +%Y%m%d)-${SanitizeFilename}.rst"
+    else
+        Dir="$(pwd)"
+        Basename="$(basename "$Dir")"
+        DocRef=""
+        # omit leading numbers, "-" and "_"
+        Basename="$(echo "$Basename"| \
+            sed -e 's/\([[:digit:]_-]*\)\(.*\)/\2/')"
+        SanitizeFilename "$Basename"
+        NewFileName="$Dir/$(date +%Y%m%d)-${SanitizeFilename}.rst"
+    fi
+    local Datestr
+    Datestr="$(date +%F)"
+
+    if  [ ! -e "$NewFileName" ] ; then
+        linestr=$(echo "$Basename"| tr -c "\n" "*")
+        # Create new file according to template (with unicode BOM)
+        printf "\357\273\277$linestr\n$Basename\n$linestr\n"  > "$NewFileName"
+        echo   "----------------------\nNotes\n----------------------
+:Author: $USER
+:Date: $Datestr
+:Revision: 1.0
+:Description: $DocRef
+
+.. footer::
+   Page ###Page###
+.. contents::
+.. section-numbering::
+" >> "$NewFileName"
+
+    else
+        echo "$NewFileName already exists. No new document created.">&2
+    fi
+    # return global variable
+    RstNewNote="$NewFileName"
+}
+
+
+
+
+RstEdit () {
+    RstEdit="$1"
+    if [ -n "$RST_EDITOR" ]; then
+        "$RST_EDITOR" "$RstEdit"
+    else
+        LaunchEditor "$RstEdit"
+    fi
+    # Return global variable RstEdit
+}
+
+
+
+
+RstView () {
+    RstView="$1"
+    if [ -n "$RST_VIEWER" ]; then
+        "$RST_VIEWER" "$RST_VIEWER_OPT$RstView" &
+    else
+        LaunchViewer "$RstView"
+    fi
+    # Return global variable RstView
+}
+
+
+
+Main "$1" "$2"

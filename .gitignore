@@ -1,0 +1,10 @@
+# Compiled source #
+###################
+README.html
+README.pdf
+*.swp
+*.xml
+docs/build/*
+
+
+
