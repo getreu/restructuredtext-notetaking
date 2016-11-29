@@ -148,12 +148,14 @@ SyncFilename () {
     # line 2: delete all rst-section marker lines
     # line 3: delete all rst directives and link lines
     #         (lines starting with '..' or ':' )
-    # line 4: concat the title strings, '--' and the subtitle sting (if any)
+    # line 4: omit titles when prepended with whitespace
+    # line 5: concatenate title string, '--' and subtitle sting (if any)
     Title="$(echo "$FirstLine" | \
-    sed -e '/###\+$/d' -e '/\*\*\*\+$/d' -e '/===\+$/d' -e '/---\+$/d' \
-                       -e '/^:/d' -e '/^\.\./d' | \
-    sed  -z -e 's/\n*$//'  -e 's/\n\+/--/'g
-            )"
+      sed -e '/###\+$/d' -e '/\*\*\*\+$/d' -e '/===\+$/d' -e '/---\+$/d' \
+                         -e '/^:/d' -e '/^\.\./d' \
+                         -e '/^[[:blank:]]/d'| \
+      sed  -z -e 's/\n*$//'  -e 's/\n\+/--/'g
+    )"
     # A title was found when Title not empty and Title <> FirstLine
     if [ ! -z "$Title" ] &&  [ ! "$FirstLine" = "$Title" ] ; then
         # extract leading numbers including "-" and "_"

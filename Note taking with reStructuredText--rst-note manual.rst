@@ -20,7 +20,7 @@ Note taking with reStructuredText
    PageBreak
 
 
-This is the documentation of the ``bin/rst-note`` program. 
+This is the documentation of the ``bin/rst-note`` program.
 
 Markup languages like ``reStructuredText`` are perfectly suited for quick note
 taking. Type your notes with your favourite editor, view and browse them
@@ -53,7 +53,7 @@ four modes depending on it’s options (see ):
     Renames the filename to be in sync with the document’s title.
 
 The project is hosted on Github: restructuredtext-notetaking_.
-The documentation is at http://getreu.net_. 
+The documentation is at http://getreu.net_.
 There you also find a `pdf rendition`_ of this document.
 
 .. _restructuredtext-notetaking: https://github.com/getreu/restructuredtext-notetaking
@@ -67,7 +67,7 @@ There you also find a `pdf rendition`_ of this document.
     2. Read about the 2 most common use cases `How students take notes`_.
 
 .. [#]
-   MacOsX ships with the ``BSD sed`` tool which is not compatible with 
+   MacOsX ships with the ``BSD sed`` tool which is not compatible with
    ``GNU sed``. Workaround: run in ``rst-note`` in `busybox`.
 
 .. raw:: pdf
@@ -295,7 +295,7 @@ creates the following document [#]_:
    :Date: YYYY-MM-DD
    :Revision: 1.0
 
-.. [#] The template is slightly simplyfied.  
+.. [#] The template is slightly simplyfied.
 
 
 Example 1
@@ -338,7 +338,7 @@ It is also possible to invoke the script without options:
 
      rst-note
 
-The result is the same as above but the current working directory 
+The result is the same as above but the current working directory
 defines  ``<path>/<dir>``.
 
 Example 2
@@ -462,7 +462,7 @@ Syntax 4
 launches the ``gvim`` editor by default. Replace ``gvim`` by any
 editor of your choice. At the same time a ``chrome`` or ``chromium``
 window will pop up showing the live rendition of your *rst* file. You
-need to have the restview_ installed on your system. 
+need to have the restview_ installed on your system.
 You may want to use some autosave editor feature in order to observe
 changes immediately in the rendered preview live.
 
@@ -514,7 +514,7 @@ Syntax 5
       rst-note -ro <path>/<filename>.rst
 
 launches restview_ which opens a live-rendition of the current document in
-your default browser. 
+your default browser.
 
 Example 5
 ---------
@@ -595,7 +595,7 @@ will result in a new file:
    File: ``10-Mein Körper/20161105-Mein Körper--Notes.rst``
 
 
-   **Note**
+.. note::
 
    The parent directory’s order mark is never used to compose a
    filename for a new note.
@@ -609,12 +609,18 @@ friendly form. If the result does not equal to
 ``<simplified-title>--<simplified-subtitle>`` the filename is changed on
 disk. Potential *order marks* remain untouched.
 
-    **Note**
+.. tip::
 
-    You can disable this feature by inserting a blank line at the
-    beginning of the *rst* file.
+   You can disable the title-filname synchronisation feature by prepending
+   the title string or the subtitle string with one more more whitespace.
 
-    **Important**
+.. attention::
+
+   Title and subtitle strings are only taken into account for filename
+   synchronistion when they are defined within the first 6 lines of the
+   `rst` document.
+
+.. note::
 
     ``rst-note`` might change the note’s filename but never changes an
     *order mark*!
@@ -644,9 +650,9 @@ Linux
 
 #. Install the rst-live-previewer restview_.
 
-#. Download the note-taking-script ``bin/rst-note`` from Github 
+#. Download the note-taking-script ``bin/rst-note`` from Github
    `getreu/restructuredtext-notetaking`_
-   
+
    .. _`getreu/restructuredtext-notetaking`:
     <https://github.com/getreu/restructuredtext-notetaking>
 
@@ -671,11 +677,11 @@ Linux
    section enclosed in the comments ``CONFIGURATION SECTION START`` and
    ``CONFIGURATION SECTION END``.
 
-       **Note**
+   .. note::
 
-       The only file you edit to change the default choices for *editor*
-       and *viewer* under Linux is ``rst-note``. **Not**
-       ``rst-note.bak``!
+      The only file you edit to change the default choices for *editor*
+      and *viewer* under Linux is ``rst-note``. **Not**
+      ``rst-note.bak``!
 
    Here you can specify what editor you want to use.
    Make sure that your editor does
@@ -683,17 +689,17 @@ Linux
    but when you quit, no *rst*-title-filename sync will occur.
    Outside the ``CONFIGURATION SECTION`` no changes should be necessary.
 
-       **Warning**
+   .. warning::
 
-       The environment variables ``ADOC_EDITOR`` or ``ADOC_VIEWER``
-       -when defined- have precedence over settings in the
-       ``CONFIGURATION SECTION`` and will override them.
+      The environment variables ``ADOC_EDITOR`` or ``ADOC_VIEWER``
+      -when defined- have precedence over settings in the
+      ``CONFIGURATION SECTION`` and will override them.
 
 #. Test the installation: open a console window and type ``rst-note``.
    An *editor* and *viewer* window containing a note template should
    open.
 
-#. Optional: integrate the scripts with your file-manager (see 
+#. Optional: integrate the scripts with your file-manager (see
    `Integration with file manager`_).
 
 
@@ -707,11 +713,11 @@ Windows
 #. Download the files ``bin/rst-note``, ``bin/rst-note.bat`` and
    ``bin/busybox.exe`` from Github
    `getreu/restructuredtext-notetaking`_
-   
+
 #. The version of ``busybox`` in the above repository is
    probably outdated. Please get a newer version from here:
    http://frippery.org/busybox/
- 
+
 #. Copy the 3 files in a directory of your choice (hereafter referred to as
    *BIN\_DIR*).
 
@@ -721,18 +727,18 @@ Windows
    in the comments ``CONFIGURATION SECTION START`` and
    ``CONFIGURATION SECTION END``.
 
-       **Note**
+   .. note::
 
-       The only file you edit to change the default choices for *editor*
-       and *viewer* under Windows is ``rst-note.bat``. **Not**
-       ``rst-note``!
+      The only file you edit to change the default choices for *editor*
+      and *viewer* under Windows is ``rst-note.bat``. **Not**
+      ``rst-note``!
 
-       **Important**
+   .. important::
 
-       New notes are created with an Unicode BOM indicating Unicode
-       encoding. Do not use the ``notepad`` editor as it does not
-       understand Unicode. Use ``Wordpad`` or any modern Unicode
-       editor instead.
+      New notes are created with an Unicode BOM indicating Unicode
+      encoding. Do not use the ``notepad`` editor as it does not
+      understand Unicode. Use ``Wordpad`` or any modern Unicode
+      editor instead.
 
    Here you can specify the path to the restview_-program. Next configure
    the path to your editor of your
@@ -747,14 +753,14 @@ Windows
 
    .. figure:: images/shortcut-properties.png
       :width: 70%
-      
+
       Shortcut properties
 
 #. Test the installation: drag a file or directory on the
    ``rst-note Shortcut`` on your desktop. An *editor* and *viewer*
    window should open.
 
-#. Optional: integrate the scripts with your file-manager (see 
+#. Optional: integrate the scripts with your file-manager (see
    `Integration with file manager`_).
 
 
