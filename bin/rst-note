@@ -154,8 +154,8 @@ SyncFilename () {
                        -e '/^:/d' -e '/^\.\./d' | \
     sed  -z -e 's/\n*$//'  -e 's/\n\+/--/'g
             )"
-    # A title was found when Title <> FirstLine
-    if [ ! "$FirstLine" = "$Title" ] ; then
+    # A title was found when Title not empty and Title <> FirstLine
+    if [ ! -z "$Title" ] &&  [ ! "$FirstLine" = "$Title" ] ; then
         # extract leading numbers including "-" and "_"
         # example  "20150912-hallo.rst" -> "20150912-"
         # example  "01-abstract.rst" -> "01-"
