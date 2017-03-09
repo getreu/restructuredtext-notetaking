@@ -1,86 +1,10 @@
-*********************************
-Note taking with reStructuredText
-*********************************
-----------------------
-``rst-note``  manual
-----------------------
-
-:Author: Jens Getreu
-:Date: 2016-11-02
-:Revision: 0.8.1
-
-.. footer::
-   Page ###Page###
-.. contents::
-.. section-numbering::
-
-
-.. raw:: pdf
-
-   PageBreak
-
-
-This is the documentation of the ``bin/rst-note`` program.
-
-Markup languages like ``reStructuredText`` are perfectly suited for quick note
-taking. Type your notes with your favourite editor, view and browse them
-with ``Chromium``, ``Chrome`` or ``Firefox``.
-
-All you need is the so called ``rst-note`` ash-script, the python packages
-restview_, docutils_, pygments_ and any browser of your choice: Chromium, Chrome
-or Firefox.
-
-.. _pygments: https://pypi.python.org/pypi/pygments
-.. _restview: https://pypi.python.org/pypi/restview
-.. _docutils: https://pypi.python.org/pypi/docutils
-
-
-
-
-``rst-note`` runs under Linux and Windows. [#]_ The script operates in
-four modes depending on it’s options (see ):
-
-:New note:
-    Creates a new context depending *rst* note file.
-
-:Edit notes:
-    Launches an editor.
-
-:View notes:
-    Launches a live-previewer (Firefox, Chrome of Chromium).
-
-:Sync filename:
-    Renames the filename to be in sync with the document’s title.
-
-The project is hosted on Github: restructuredtext-notetaking_.
-The documentation is at http://getreu.net_.
-There you also find a `pdf rendition`_ of this document.
-
-.. _restructuredtext-notetaking: https://github.com/getreu/restructuredtext-notetaking
-.. _getreu.net: http://getreu.net/public/downloads/doc/restructuredtext-notetaking/
-.. _pdf rendition: http://getreu.net/public/downloads/doc/restructuredtext-notetaking/README.pdf
-
-**Quickstart:**
-
-    1. Read the installation guide for Linux_ or Windows_.
-
-    2. Read about the 2 most common use cases `How students take notes`_.
-
-.. [#]
-   MacOsX ships with the ``BSD sed`` tool which is not compatible with
-   ``GNU sed``. Workaround: run in ``rst-note`` in `busybox`.
-
-.. raw:: pdf
-
-   PageBreak
-
-
+.. _how students take notes:
 
 How students take notes
 =======================
 
-A fellow student still uses paper and pen. I ask her why and she replied
-“I can better concentrate. My computer distracts me. I would do all kind of other
+A fellow student still uses paper and pen. I ask her why and she replied “I can
+better concentrate. My computer distracts me. I would do all kind of other
 things, but not listening.”.
 
 This is certainly true. As I am concerned, I am not good at logistics.
@@ -90,6 +14,8 @@ blessing.
 To illustrate how to work with ``rst-note`` here are my most common
 workflows.
 
+
+
 The lesson starts
 -----------------
 
@@ -98,8 +24,6 @@ The lesson starts
    :width: 70%
 
    Create a new note in the selected directory
-
-
 
 Alternatively you can open the folder you want to create a new note in
 and right-click on some empty white space. Both actions create a new
@@ -115,7 +39,6 @@ After creation of the new file ``rst-note`` opens an editor and the
 
 .. figure:: images/workflow1-3.png
    :width: 100%
-
 
    Editor and ``viewrest`` viewer window opens automatically
 
@@ -140,6 +63,11 @@ After creation of the new file ``rst-note`` opens an editor and the
     Before and after launching the editor ``rst-note`` renames the file
     to be in sync with the reStructuredText title. For more details see
     `Title filename sync`_.
+
+
+.. raw:: latex
+
+   \clearpage
 
 
 Taking notes on an existing file
@@ -172,6 +100,9 @@ The above figure shows the metadata ``rst-note`` has inserted automatically.
 
    PageBreak
 
+.. raw:: latex
+
+   \clearpage
 
 Create a new note
 =================
@@ -198,6 +129,9 @@ Windows
 
     -  Right click on a file or directory in file explorer and choose *rst-note*
        in the context menu. See `Windows file explorer configuration`_.
+
+
+
 
 Invoking the script
 -------------------
@@ -233,13 +167,13 @@ shows a short help text with available command line options:
    | Option         | Create a new   | Launch editor  | Launch viewer  | Sync           |
    |                | note           |                |                | title-filename |
    +================+================+================+================+================+
-   | *without*      | Y \*           | Y              | Y              | Y              |
+   | *without*      | Y *            | Y              | Y              | Y              |
    +----------------+----------------+----------------+----------------+----------------+
-   | ``-ro``        | Y \*           | N              | Y              | N              |
+   | ``-ro``        | Y *            | N              | Y              | N              |
    +----------------+----------------+----------------+----------------+----------------+
-   | ``-eo``        | Y \*           | Y              | N              | Y              |
+   | ``-eo``        | Y *            | Y              | N              | Y              |
    +----------------+----------------+----------------+----------------+----------------+
-   | ``-so``        | Y \*           | N              | N              | Y              |
+   | ``-so``        | Y *            | N              | N              | Y              |
    +----------------+----------------+----------------+----------------+----------------+
 
 
@@ -252,7 +186,7 @@ shows a short help text with available command line options:
    +--------+-----------------------+
    | N      | not included          |
    +--------+-----------------------+
-   | Y\*    | If a note with the    |
+   | Y *    | If a note with the    |
    |        | same filename exists  |
    |        | on disk already, no   |
    |        | new note is created.  |
@@ -448,6 +382,9 @@ a live-previewer showing the rendered *rst* file:
 
    PageBreak
 
+.. raw:: latex
+
+   \clearpage
 
 Editing notes
 =============
@@ -501,6 +438,9 @@ create this note  [2]_:
    This only works if you have not changed the original title in the
    meantime!
 
+.. raw:: latex
+
+   \clearpage
 
 
 Viewing notes
@@ -537,6 +477,9 @@ of a downloaded document.
 
    PageBreak
 
+.. raw:: latex
+
+   \clearpage
 
 Title filename sync
 ===================
@@ -634,6 +577,9 @@ For details about the
 
    PageBreak
 
+.. raw:: latex
+
+   \clearpage
 
 
 
@@ -644,6 +590,7 @@ Installation and configuration
 configuration see section Windows_ below.
 
 
+.. _linux:
 
 Linux
 -----
@@ -668,7 +615,7 @@ Linux
 
    .. code:: bash
 
-         sudo apt-get install dirname basename sed vim-gtk
+         sudo apt-get install sed vim-gtk
 
    Replace ``vim-gtk`` with an editor of your choice. Configure
    ``rst-note`` accordingly.
@@ -702,8 +649,11 @@ Linux
 #. Optional: integrate the scripts with your file-manager (see
    `Integration with file manager`_).
 
+.. raw:: latex
 
+   \clearpage
 
+.. _windows:
 
 Windows
 -------
@@ -719,7 +669,7 @@ Windows
    http://frippery.org/busybox/
 
 #. Copy the 3 files in a directory of your choice (hereafter referred to as
-   *BIN\_DIR*).
+   ``BIN_DIR``).
 
 #. Configuration:
 
@@ -765,6 +715,9 @@ Windows
 
 
 
+.. raw:: latex
+
+   \clearpage
 
 
 Integration with file manager
@@ -805,6 +758,9 @@ following images show the configuration of the Thunar-file-manger.
 
    Appearance condition
 
+.. raw:: latex
+
+   \clearpage
 
 Windows file explorer configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -820,14 +776,14 @@ Windows file explorer configuration
       Choose default program
 
 3. Select the *Always use the selected program* and then click
-   *Browse…​*.
+   *Browse...*.
 
    .. figure:: images/explorer2.png
       :width: 80%
 
       Click on *Browse...*
 
-4. Click *Browse…​* then browse to your *BIN\_DIR* directory, select
+4. Click *Browse...* then browse to your ``BIN_DIR`` directory, select
    ``rst-note.bak`` and click *Open* and later *Ok*.
 
    .. figure:: images/explorer3.png
@@ -841,8 +797,8 @@ Windows file explorer configuration
 
    -  `How to Add Any Application Shortcut to Windows Explorer’s Context Menu <http://www.howtogeek.com/107965/how-to-add-any-application-shortcut-to-windows-explorers-context-menu/>`__.
 
-
-
-
+.. _pygments: https://pypi.python.org/pypi/pygments
+.. _restview: https://pypi.python.org/pypi/restview
+.. _docutils: https://pypi.python.org/pypi/docutils
 
 

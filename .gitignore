@@ -4,7 +4,7 @@ README.html
 README.pdf
 *.swp
 *.xml
-docs/build/*
+doc/build/*
 
 
 

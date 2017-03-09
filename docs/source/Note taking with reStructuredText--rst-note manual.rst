@@ -1,1 +1,0 @@
-../../Note taking with reStructuredText--rst-note manual.rst

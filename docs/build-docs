@@ -1,9 +1,0 @@
-#!/bin/sh
-Source="Note taking with reStructuredText--rst-note manual"
-SourceDir="./source/"
-
-BuildDir="./build/"
-PdfDir="${BuildDir}pdf/"
-HtmlDir="${BuildDir}html/"
-rst2pdf -o "${PdfDir}${Source}.pdf" "$SourceDir${Source}.rst"
-rst2html.py "$SourceDir${Source}.rst" > "${HtmlDir}${Source}.html"
