@@ -600,8 +600,7 @@ Linux
 #. Download the note-taking-script ``bin/rst-note`` from Github
    `getreu/restructuredtext-notetaking`_
 
-   .. _`getreu/restructuredtext-notetaking`:
-    <https://github.com/getreu/restructuredtext-notetaking>
+   .. _`getreu/restructuredtext-notetaking`: https://github.com/getreu/restructuredtext-notetaking
 
 #. Copy it in a location of your ``$PATH`` and make it executable for
    everyone.
