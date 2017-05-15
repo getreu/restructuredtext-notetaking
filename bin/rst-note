@@ -211,7 +211,7 @@ RstNewNote () {
     if [ -n "$1" ] && [ -f "$1" ] ; then
         Dir="$(dirname "$1")"
         Basename="$(basename "$1")"
-        DocRef="\`${Basename}\`__"
+        DocRef=":Refers to: \`${Basename}\`__"
         DocRef="${DocRef}\n\n.. __: $(urlencode ${Basename})"
         SanitizeFilename "$Basename"
         NewFileName="$Dir/${SanitizeFilename}.rst"
@@ -244,8 +244,8 @@ RstNewNote () {
         echo   "\n----------------------\nNotes\n----------------------\n
 :Author: $USER
 :Date: $Datestr
-:Revision: 1.0
-:Description: $DocRef
+:Version: 1.0
+$DocRef
 
 " >> "$NewFileName"
 
