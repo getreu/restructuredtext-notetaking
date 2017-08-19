@@ -2,6 +2,11 @@
 Note taking with reStructuredText
 *********************************
 
+.. important::                                                                   
+   This project is discontinued. Please use `tp-note`_ instead.  The
+   code of `tp-note` is generic and works with all markup languages.
+
+.. _tp-note: http://blog.getreu.net/projects/tp-note/
 
 
 Markup languages like ``reStructuredText`` are perfectly suited for quick note

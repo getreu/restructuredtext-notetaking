@@ -494,18 +494,18 @@ The filename has 3 parts:
 
 ::
 
-    <order mark>-<simplified-title>--<simplified-subtitle>.rst
+    <sort tag>-<simplified-title>--<simplified-subtitle>.rst
 
-A ``<order mark>`` can be a
+A ``<sort tag>`` can be a
 
--  *chronological order mark* or
+-  *chronological sort tag* or
 
    ::
 
        20140211-
        20151208-
 
--  *a sequence number order mark*.
+-  *a sequence number sort tag*.
 
    ::
 
@@ -513,16 +513,16 @@ A ``<order mark>`` can be a
        08-
        09_02-
 
-``<order mark>`` can be any combination of ``0123456789-_``.
+``<sort tag>`` can be any combination of ``0123456789-_``.
 
 When ``rst-note`` creates a new note based on a directory, it prepends a
-*chronological order mark* of today. The ``<simplified-title>`` part is
-derived from the parent directory name omitting its own *order mark*.
+*chronological sort tag* of today. The ``<simplified-title>`` part is
+derived from the parent directory name omitting its own *sort tag*.
 
 .. figure:: images/filing-system1.png
    :width: 60%
 
-   Sequence number order mark
+   Sequence number sort tag
 
 The shell command
 
@@ -540,17 +540,17 @@ will result in a new file:
 
 .. note::
 
-   The parent directory’s order mark is never used to compose a
+   The parent directory’s sort tag is never used to compose a
    filename for a new note.
 
-When ``rst-note`` creates a new note based on a filename no *order mark*
+When ``rst-note`` creates a new note based on a filename no *sort tag*
 is prepended.
 
 Before and after editing the ``rst-note`` analyses the title and
 subtitle of the *rst* file and simplifies them in a file-system
 friendly form. If the result does not equal to
 ``<simplified-title>--<simplified-subtitle>`` the filename is changed on
-disk. Potential *order marks* remain untouched.
+disk. Potential *sort tags* remain untouched.
 
 .. tip::
 
@@ -566,7 +566,7 @@ disk. Potential *order marks* remain untouched.
 .. note::
 
     ``rst-note`` might change the note’s filename but never changes an
-    *order mark*!
+    *sort tag*!
 
 For details about the
 ``<simplified-title>--<simplified-subtitle>`` string refer to the
@@ -684,10 +684,10 @@ Windows
 
    .. important::
 
-      New notes are created with an Unicode BOM indicating Unicode
-      encoding. Do not use the ``notepad`` editor as it does not
-      understand Unicode. Use ``Wordpad`` or any modern Unicode
-      editor instead.
+      New notes are created with an Unicode BOM indicating Unicode encoding. Do
+      not use the ``notepad`` editor coming with Windows older then Vista. These
+      old verisons of ``notepad`` do not handle Unicode correctly. Use `Wordpad`
+      or and other modern Unicode editor instead.
 
    Here you can specify the path to the restview_-program. Next configure
    the path to your editor of your
